@@ -1,0 +1,43 @@
+class Solution(object):
+    def distance(self, word1, word2):
+        length = 0
+        for i in range(len(word1)):
+            if word1[i] != word2[i]:
+                length += 1
+        return length
+
+    def ladderLength(self, beginWord, endWord, wordList):
+        from collections import deque
+        """
+        :type beginWord: str
+        :type endWord: str
+        :type wordList: Set[str]
+        :rtype: int
+        """
+        neighbors = {beginWord: []}
+        for word1 in wordList:
+            if not word1 in neighbors.keys():
+                neighbors[word1] = []
+            for word2 in wordList:
+                if self.distance(word1, word2) == 1:
+                    neighbors[word1].append(word2)
+                    
+                    if word2 in neighbors.keys():
+                        neighbors[word2].append(word1)
+                    else:
+                        neighbors[word2] = [word1]
+            if self.distance(beginWord, word1) == 1:
+                neighbors[beginWord].append(word1)
+            
+        visited = []
+        queue = deque([[beginWord, 1]])
+        while queue:
+            word, length = queue.popleft()
+            if self.distance(word, endWord) == 1:
+                return length + 1
+            for x in neighbors[word]:
+                if x in visited:
+                    continue
+                queue.append([x, length +1])
+        
+        return 0
