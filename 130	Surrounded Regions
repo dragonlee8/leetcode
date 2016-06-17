@@ -1,0 +1,28 @@
+class Solution(object):
+    def setFlag(self, i, j, m, n, board):
+        if i < 0 or j < 0 or i >= m or j >= n or board[i][j] != 'O':
+            return
+        board[i][j] = 'X'
+        self.setFlag(i-1, j, m, n, board)
+        self.setFlag(i+1, j, m, n, board)
+        self.setFlag(i, j-1, m, n, board)
+        self.setFlag(i, j+1, m, n, board)
+        
+    def solve(self, board):
+        """
+        :type board: List[List[str]]
+        :rtype: void Do not return anything, modify board in-place instead.
+        """
+        if not board:
+            return 
+        
+        m = len(board)
+        n = len(board[0])
+        
+        flag = [[0 for x in range(n)] for x in range(m)]
+        
+        for i in range(m):
+            self.setFlag(i, 0, m, n, board)
+            
+        for j in range(n):
+            self.setFlag(0, j, m, n, board)
