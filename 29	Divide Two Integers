@@ -1,0 +1,38 @@
+class Solution(object):
+    def divide(self, dividend, divisor):
+        """
+        :type dividend: int
+        :type divisor: int
+        :rtype: int
+        """
+        if dividend == 0:
+            return 0
+        
+        sign = (dividend > 0 and divisor > 0) or (dividend < 0 and divisor < 0)
+
+        dividend = max(dividend, 0-dividend)
+        divisor = max(divisor, 0-divisor)
+        if divisor > dividend:
+            return 0
+        if dividend > 2147483647:
+            return 2147483647
+            
+        left, right = 0, dividend
+        while left < right -1:
+            mid = (left+right) >> 1
+            if mid * divisor == dividend:
+                ret = mid if sign == True  else 0-mid
+                return ret
+            elif mid * divisor > dividend:
+                right = mid
+            else:
+                left = mid
+        
+        
+        if right*divisor <= dividend:
+            ret = right if sign == True else 0-right
+            return ret
+        else:
+            ret = left if sign == True else 0-left
+            return ret
+        
