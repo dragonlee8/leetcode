@@ -1,0 +1,28 @@
+class Solution(object):
+    result = []
+    def helper(self, n, k, tmp):
+        if k == 0:
+            self.result.append(list(tmp))
+            return
+        if not n or n < k:
+            return 
+        
+        self.helper(n-1, k, tmp)
+        
+        self.helper(n-1, k-1, tmp+[n])
+        
+    def combine(self, n, k):
+        """
+        :type n: int
+        :type k: int
+        :rtype: List[List[int]]
+        """
+        if not n or k <= 0:
+            return self.result
+        
+        self.result = []
+        
+        tmp = []
+        self.helper(n, k, tmp)
+        
+        return self.result
