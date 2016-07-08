@@ -1,0 +1,50 @@
+class Solution(object):
+    def checker(self, board, pos, n):
+        x = pos%9
+        y = pos/9
+        
+        for i in range(x/3, x/3+3):
+            for j in range(y/3, y/3+3):
+                if board[y][x] != '.' and not(y ==j and x == i) and int(board[y][x]) == n:
+                    return False
+                
+        for i in range(0, 9):
+            if x != i and board[y][i] != '.' and int(board[y][i]) == n:
+                return False
+            if y != i and board[i][x] != '.' and int(board[i][x]) == n:
+                return False
+            
+        return True
+    
+        
+    def helper(self, board, pos):
+        x = pos%9
+        y = pos/9
+        while board[y][x] != '.':
+            pos += 1
+            if pos == 81:
+                return True
+            x = pos%9
+            y = pos/9
+        
+            
+        for n in range(0, 9):
+            if self.checker(board, pos, n):
+                y = pos/9
+                x = pos%9
+                board[y][x] = str(n)
+                
+                if pos == 80:
+                    return True
+                if self.helper(board, pos+1):
+                    return True
+                board[y][x] = '.'
+        return False
+        
+    def solveSudoku(self, board):
+        """
+        :type board: List[List[str]]
+        :rtype: void Do not return anything, modify board in-place instead.
+        """
+        ret = self.helper(board, 0)
+        return
