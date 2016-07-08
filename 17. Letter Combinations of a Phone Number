@@ -1,0 +1,24 @@
+class Solution(object):
+    def letterCombinations(self, digits):
+        """
+        :type digits: str
+        :rtype: List[str]
+        """
+        
+        if not digits:
+            return []
+            
+        board = ['', '', 'abc', 'def', 'ghi', 'jkl', 'mno', 'pqrs', 'tuv', 'wxyz']
+        count = len(digits)
+        
+        result = ['']
+        for i in digits:
+            ii = int(i)
+            tmp = list(result)
+            result = []
+            for x in board[ii]:
+                result += [word+x for word in tmp]
+            
+            
+        return result
+        
