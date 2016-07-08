@@ -1,0 +1,19 @@
+class Solution(object):
+    def grayCode(self, n):
+        """
+        :type n: int
+        :rtype: List[int]
+        """
+        tmp = ['']
+        result = []
+        for i in range(n):
+            tmp = [(str('0')+x) for x in tmp] + [(str('1') + x) for x in tmp[::-1]]
+        
+        for x in tmp:
+            num = 0
+            for i in x:
+                num = 2*num + int(i)
+            
+            result.append(num)
+        
+        return result
