@@ -1,0 +1,26 @@
+def findSym(n):
+	if n <= 0:
+		return ""
+	
+	base = ["00", "11", "69", "88", "96"]
+	
+	ret = [""]
+	if n %2 == 1:
+		ret = ["0", "1", "8"]
+		n -= 1
+		
+	for i in range(0, n, 2):
+		startidx = 0
+		if i == n-2:
+			startidx = 1
+		l = []
+		for j in range(len(ret)):
+			for x in range(startidx, len(base)):
+				str = ret[j]
+				l.append(base[x][0] + str + base[x][1])
+		
+		ret = l
+	
+	return ret
+				
+print findSym(1)
