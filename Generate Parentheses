@@ -1,0 +1,24 @@
+class Solution:
+    # @param {int} n n pairs
+    # @return {string[]} All combinations of well-formed parentheses
+    def generateParenthesis(self, n):
+
+        # Write your code here
+        if n < 1:
+            return []
+
+        result = []
+
+        def helper(n, val, s):
+            if n == 0 and val == 0:
+                result.append(s)
+
+            if n > 0:
+                helper(n-1, val + 1, s + '(')
+
+            if val > 0:
+                helper(n, val - 1, s + ')')
+
+        helper(n, 0, "")
+
+        return result
