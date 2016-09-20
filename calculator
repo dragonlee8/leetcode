@@ -1,0 +1,54 @@
+class Calculator(object):
+    def helper(self, stack, ops):
+        if not stack:
+            return 0
+
+        num = stack.pop()
+
+        while stack:
+            num1 = stack.pop()
+            op = ops.pop()
+
+            if op == '+':
+                num = num1 + num
+            elif op == '-':
+                num = num1 - num
+            elif op == '*':
+                num = num1 * num
+            else:
+                num = num1 / num
+
+        return num
+
+    def calc(self, formular):
+        """
+        :type digits: str
+        :rtype: List[str]
+        """
+
+        if not formular:
+            return 0
+
+        num = 0
+        stack = []
+        ops = []
+        for x in formular:
+            if x.isdigit():
+                num = 10 * num + int(x)
+            elif x == '+' or x == '-':
+                stack.append(num)
+                stack.append(self.helper(stack, ops))
+                ops.append(x)
+                num = 0
+
+            elif x == '*' or x == '/':
+                stack.append(num)
+                num = 0
+                ops.append(x)
+        stack.append(num)
+
+        return self.helper(stack, ops)
+
+s = Calculator()
+print s.calc("4*1*2+3")
+
