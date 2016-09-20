@@ -1,0 +1,32 @@
+class Solution:
+    # @param board, a 9x9 2D array
+    # @return a boolean
+    def isValidSudoku(self, board):
+        if not board:
+            return False
+
+        from sets import Set
+        for i in range(9):
+            cache = Set()
+            for j in range(9):
+                if board[i][j] != '.' and board[i][j] in cache:
+                    return False
+                cache.add(board[i][j])
+
+        for j in range(9):
+            cache = Set()
+            for i in range(9):
+                if board[i][j] != '.' and board[i][j] in cache:
+                    return False
+                cache.add(board[i][j])
+
+        for i in range(3):
+            for j in range(3):
+                cache = Set()
+                for ii in range(3*i, 3*i+3):
+                    for jj in range(3*j, 3*j+3):
+                        if board[ii][jj] != '.' and board[ii][jj] in cache:
+                            return False
+                        cache.add(board[ii][jj])
+
+        return True
