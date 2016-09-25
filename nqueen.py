@@ -3,6 +3,8 @@
 import sys
 import os
 
+# Complete the function below.
+
 
 # Complete the function below.
 
@@ -12,20 +14,21 @@ def valid(i, j, n):
 
 def findThreat(i, j, n, a):
     count = 0
-    founda, foundb = False, False
+    found = [[False for x in range(2)] for x in range(2)]
     for ii in range(n):
         if ii == i:
             continue
         j1 = j - (i - ii)
         j2 = j + (i - ii)
-        if not founda and valid(ii, j1, n):
+        
+        if not found[ii>i][j1>j] and valid(ii, j1, n):
             if j1 == a[ii]-1:
                 count += 1
-                founda = True
-        if not foundb and valid(ii, j2, n):
+                found[ii>i][j1>j] = True
+        if not found[ii>i][j2>j] and valid(ii, j2, n):
             if j2 == a[ii] -1:
                 count += 1
-                foundb = True
+                found[ii>i][j2>j] = True
 
     return count
 
