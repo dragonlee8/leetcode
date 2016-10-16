@@ -8,14 +8,11 @@ class Solution(object):
         if not coins or amount == 0:
             return 0
 
-        n = len(coins)
-        dp = [sys.maxint] * (amount+1)
+        INF = 0x7ffffffe
+        dp = [0] + [INF] * amount 
+        for i in xrange(amount + 1):
+            for coin in coins:
+                if i + coin <= amount:
+                    dp[i+coin] = min(dp[i+coin],dp[i] + 1)
+        return dp[amount] if dp[amount] != INF else -1
 
-        for i in range(amount+1):
-            for j in range(i):
-                if i-j in coins:
-                    dp[i] = min(dp[i], dp[j+1])
-                
-                
-        return dp[-1]
-                
