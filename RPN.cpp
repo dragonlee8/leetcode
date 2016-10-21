@@ -3,34 +3,30 @@
 #include <stdio.h>
 #include <iostream>
 #include <stdlib.h>
+#include <string>     // std::string, std::stod
 
 using namespace std;
 
 class  Token
 {
 public:
+	Token() {};
     virtual bool isValue() = 0;
-    void setValue(int v)
-    {
-        value = v;
-    }
-    int getValue(){
-        return value;
-    }
-    virtual void execute(vector<Token* >& s) = 0;
-private:
-    int value;
+    virtual void execute(vector<double>& s) = 0;
 };
 
 class Operand:public Token {
 public:
+	Operand(const string& num) {
+        value = atoi(num.c_str());
+    }
     bool isValue(){
         return true;
     }
 
-    void execute(vector<Token*>& s)
+    void execute(vector<double>& s)
     {
-        s.push_back(this);
+        s.push_back(value);
     }
 
 private:
@@ -44,14 +40,13 @@ public:
         return false;
     }
 
-    void execute(vector<Token*>& s)
+    void execute(vector<double>& s)
     {
-        Token* num1 = s.back();
+        double num1 = s.back();
         s.pop_back();
-        Token* num2 = s.back();
+        double num2 = s.back();
         s.pop_back();
-        Operand* num = new Operand;
-        num->setValue(num2->getValue() + num1->getValue());
+        double num = (num1 + num2);
         s.push_back(num);
     }
 };
@@ -63,14 +58,13 @@ public:
         return false;
     }
 
-    void execute(vector<Token*>& s)
+    void execute(vector<double>& s)
     {
-        Token* num1 = s.back();
+        double num1 = s.back();
         s.pop_back();
-        Token* num2 = s.back();
+        double num2 = s.back();
         s.pop_back();
-        Operand* num = new Operand;
-        num->setValue(num2->getValue() - num1->getValue());
+        double num = num2 - num1;
         s.push_back(num);
     }
 };
@@ -80,82 +74,50 @@ public:
     virtual Token* create(string& value) = 0;
 };
 
-class OperandCreator : public Creator{
-public:
-    Token* create(std::string& value){
-        Operand* op = new Operand;
-        op->setValue(atoi(value.c_str()));
-        return op;
-    }
-};
-
-class plusCreator : public Creator{
-public:
-    Token* create(string& value){
-        return new plusSign;
-    }
-};
-
-class minusCreator : public Creator{
-public:
-    Token* create(string& value){
-        return new minusSign;
-    }
-};
-
 class Factory{
 private:
-    map<string, Creator*>  table;
+    map<string, Token*>  table;
 
 public:
     Token* create(string& value)
     {
-        map<string, Creator*>::iterator it = table.find(value);
+        map<string, Token*>::iterator it = table.find(value);
         if (it!= table.end())
         {
-            return (Token*)it->second->create(value);
+            return (Token*)it->second;;
         }
-        return NULL;
+        else
+        {
+        	return new Operand(value);
+        }
+
     }
 
-    void registe(string name, Creator* creator)
+    void registe(string name, Token* operators)
     {
-        table[name] = creator;
+        table[name] = operators;
     }
 };
 
 int main()
 {
     Factory factory;
-    Creator* plus_creator = new plusCreator;
-    Creator* minus_creator = new minusCreator;
-    Creator* operand_creator = new OperandCreator;
+    Token* plus_creator = new plusSign;
+    Token* minus_creator = new minusSign;
 
 
     factory.registe(string("+"), plus_creator);
     factory.registe(string("-"), minus_creator);
-    factory.registe(string("0"), operand_creator);
-    factory.registe(string("1"), operand_creator);
-    factory.registe(string("2"), operand_creator);
-    factory.registe(string("3"), operand_creator);
-    factory.registe(string("4"), operand_creator);
-    factory.registe(string("5"), operand_creator);
-    factory.registe(string("6"), operand_creator);
-    factory.registe(string("7"), operand_creator);
-    factory.registe(string("8"), operand_creator);
-    factory.registe(string("9"), operand_creator);
 
 
-    vector<Token*> stk;
+    vector<double> stk;
     vector<string> input;
     input.push_back(string("1"));
     input.push_back(string("1"));
-    input.push_back(string("-"));
+    input.push_back(string("+"));
     for (int i = 0; i < input.size(); ++i)
     {
         factory.create(input[i])->execute(stk);
     }
-    cout << stk.back()->getValue() << endl;
+    cout << stk.back() << endl;
 }
-
-
