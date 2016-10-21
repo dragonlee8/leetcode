@@ -1,13 +1,10 @@
 #include <iostream>
-#include <cstdlib>
 #include <cstdio>
 #include <sstream>
 #include <deque>
 #include <vector>
-#include <cmath>
 #include <utility>
 #include <pthread.h>
-#include <semaphore.h>
 
 using namespace std;
 pthread_mutex_t mu;
