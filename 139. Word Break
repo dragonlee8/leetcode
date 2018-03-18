@@ -21,3 +21,47 @@ class Solution(object):
                     break
         
         return dp[-1]
+
+
+        :type s: str
+        :type wordDict: Set[str]
+        :rtype: bool
+        """
+        if not s or not wordDict:
+            return False
+            
+        n = len(s)    
+        dp = [False] * (n+1)
+        dp[0] = True
+        
+        for i in range(1, n+1):
+            if not dp[i-1]:
+                continue
+            for j in range(i, n+1):
+                if s[i-1:j] in wordDict:
+                    dp[j] = True
+        
+        return dp[-1]
+        
+        
+            bool wordBreak(string s, vector<string>& wordDict) {
+        int len = s.length();
+        vector<bool> dp(len +1, false);
+        dp[0] = true;
+        
+        set<string> dict(wordDict.begin(), wordDict.end());
+        
+        for (int i = 0; i < s.length(); ++i) {
+            for (int j = i; j >= 0; --j) {
+                if (!dp[j])
+                {
+                    continue;
+                }
+                if (dict.find(s.substr(j, i-j+1)) != dict.end()) {
+                    dp[i+1] = true;
+                }
+            }
+        }
+        return dp[len];
+    }
+};
