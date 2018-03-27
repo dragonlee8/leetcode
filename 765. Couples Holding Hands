@@ -1,0 +1,45 @@
+class Solution {
+public:
+    int helper(int a, map<int, vector<int> >& mapping, int* flags)  {
+        if (flags[a]) {
+            return 0;
+        }
+        flags[a] = 1;
+        cout << a << endl;
+        
+        return 1 + helper(mapping[a][0], mapping, flags) + helper(mapping[a][1], mapping, flags);
+    }
+    
+    int minSwapsCouples(vector<int>& row) {
+        map<int, vector<int> > mapping;
+        for (int i = 0; i < row.size();) {
+            int a = row[i];
+            int b = row[i+1];
+            if (a/2 == b/2) {
+                i += 2;
+                continue;
+            }
+            
+            mapping[a/2].push_back(b/2);
+                    
+            mapping[b/2].push_back(a/2);
+            i += 2;
+        }
+        
+        int flags[30] = {0};
+        int swaps = 0;
+        
+        for (auto& x : mapping) {
+            if (flags[x.first]) {
+                continue;
+            }
+            int b1 = x.second[0];
+            int b2 = x.second[1];
+            flags[x.first] = 1;
+
+            swaps += helper(b1, mapping, flags);
+            swaps += helper(b2, mapping, flags);
+        }
+        return swaps;
+    }
+};
