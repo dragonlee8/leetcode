@@ -18,23 +18,24 @@ public:
         }
         flags[A.size()] = 1;
         
+        int a0 = 0;
+        int a1 = 0;
         vector<vector<int>> dp(A.size()+1, {0,0});
         for (int i = A.size() - 1; i >=0; --i ) {
+            int pre0 = a0, pre1 = a1;
             if (flags[i+1] == 1) {
-                dp[i][0] = dp[i+1][0];
-                dp[i][1] = dp[i+1][1] + 1;
+                a0 = pre0;
+                a1 = pre1 + 1;
+            }
+            else if (flags[i+1] == -1) {
+                a0 = pre1;
+                a1 = pre0 +1;
             }
             else {
-                if (flags[i+1] == -1) {
-                    dp[i][0] = dp[i+1][1];
-                    dp[i][1] = dp[i+1][0] +1;
-                }
-                else {
-                    dp[i][0] = min(dp[i+1][0], dp[i+1][1]);
-                    dp[i][1] = min(dp[i+1][0], dp[i+1][1]) +1;
-                }
+                a0 = min(pre0, pre1);
+                a1 = min(pre0, pre1) +1;
             }
         }
-        return min(dp[0][0], dp[0][1]);
+        return min(a0, a1);
     }
 };
