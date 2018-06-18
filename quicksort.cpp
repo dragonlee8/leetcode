@@ -9,3 +9,13 @@ void quicksort(vector<int>& v, int begin, int end){
     quicksort(v, begin, less_end);
     quicksort(v, less_end + 1, end);
 }
+
+to make sure nlogn
+void rand-quicksort(vector<int>& v, int begin, int end){
+    if(end-begin<=1) return;
+
+    int pindex = rand()%(end-begin) + begin;
+    swap(v[end-1], v[pindex]);
+
+    quicksort(v, begin, end);
+}
