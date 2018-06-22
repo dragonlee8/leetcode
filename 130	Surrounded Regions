@@ -2,7 +2,7 @@ class Solution(object):
     def setFlag(self, i, j, m, n, board):
         if i < 0 or j < 0 or i >= m or j >= n or board[i][j] != 'O':
             return
-        board[i][j] = 'X'
+        board[i][j] = 'T'
         self.setFlag(i-1, j, m, n, board)
         self.setFlag(i+1, j, m, n, board)
         self.setFlag(i, j-1, m, n, board)
@@ -23,6 +23,17 @@ class Solution(object):
         
         for i in range(m):
             self.setFlag(i, 0, m, n, board)
+            self.setFlag(i, n-1, m, n, board)
             
         for j in range(n):
             self.setFlag(0, j, m, n, board)
+            self.setFlag(m-1, j, m, n, board)
+
+        
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == 'T':
+                    board[i][j] = 'O'
+                else:
+                    board[i][j] = 'X'
+    
