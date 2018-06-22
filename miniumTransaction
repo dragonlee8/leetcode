@@ -1,0 +1,64 @@
+transactions = [('a', 400, ['a', 'b', 'c', 'd']),
+                ('b', 100, ['c', 'd'])]
+
+
+def findMaxCreditor(balance):
+    maxB = -1
+    ret = None
+    for name,b in balance.iteritems():
+        if b > maxB:
+            ret = name
+            maxB = b
+    return ret
+
+def findMaxDebtor(balance):
+    maxD = 1
+    ret = None
+    for name,b in balance.iteritems():
+        if b < maxD:
+            ret = name
+            maxD = b
+    return ret
+
+def findPath(balance):
+    maxCreditor = findMaxCreditor(balance)
+    maxDebtor = findMaxDebtor(balance)
+    maxCredit = balance[maxCreditor]
+    maxDebt = balance[maxDebtor]
+
+    if maxCredit != -1*maxDebt:
+        left = maxCredit + maxDebt
+        if left > 0:
+            del balance[maxDebtor]
+            balance[maxCreditor] = left
+            print maxDebtor + " pay " + maxCreditor + " " + str(-1* maxDebt)
+        else:
+            del balance[maxCreditor]
+            balance[maxDebtor] = left
+            print maxDebtor + " pay " + maxCreditor + " " + str(maxCredit)
+        findPath(balance)
+        return
+
+    print maxDebtor + " pay " + maxCreditor + " " + str(maxCredit)
+
+balance = {}
+for transaction in transactions:
+    creditor = transaction[0]
+    total = transaction[1]
+    each = total/len(transaction[2])
+    if creditor not in balance:
+        balance[creditor] = total
+    else:
+        balance[creditor] += total
+    for debtor in transaction[2]:
+        if debtor == creditor:
+            balance[creditor] -= each
+            continue
+        #print debtor + " pay " + debtor + " " + str(each)
+        if debtor not in balance:
+            balance[debtor] = -1 * each
+        else:
+            balance[debtor] -= each
+
+print balance
+findPath(balance)
