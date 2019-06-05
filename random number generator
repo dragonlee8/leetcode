@@ -1,0 +1,75 @@
+import random
+
+class Solution(object):
+
+    def __init__(self, w):
+        """
+        :type w: List[int]
+        """
+        self.n = len(w)
+        self.sums = [0] * (self.n + 1)
+        self.totalSum = 0
+        for i in range(self.n):
+            self.update(i, w[i])
+            self.totalSum += w[i]
+
+        print self.sums
+
+    def lowBit(self, x):
+        return x & -x
+
+    def update(self, i, val):
+        j = i + 1
+        while j < self.n + 1:
+            self.sums[j] += val
+            j += self.lowBit(j)
+
+    def getSum(self, i):
+        localSum = 0
+        j = i + 1
+        while j > 0:
+            localSum += self.sums[j]
+            j -= self.lowBit(j)
+        return localSum
+
+    def pickIndex(self):
+        """
+        :rtype: int
+        """
+        # print(self.totalSum)
+        toss = random.randint(0, self.totalSum - 1)
+        l = 0
+        r = self.n - 1
+        while l < r:
+            m = l + (r - l) / 2
+            if self.getSum(m) <= toss:
+                l = m + 1
+            else:
+                r = m
+        return l
+
+    def printSums(self):
+        for i in range(0, self.n):
+            print(self.getSum(i))
+
+# Your Solution object will be instantiated and called as such:
+# obj = Solution(w)
+# param_1 = obj.pickIndex()
+
+so = Solution([3, 14, 1, 7])
+
+picked = [0] * 4
+for i in range(250000):
+    picked[so.pickIndex()] += 1
+print picked
+
+so.update(0, 7)
+so.update(1, -7)
+picked = [0] * 4
+for i in range(250000):
+    picked[so.pickIndex()] += 1
+print picked
+# print(so.pickIndex())
+# print(so.pickIndex())
+# print(so.pickIndex())
+# print(so.pickIndex())
