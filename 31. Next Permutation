@@ -1,0 +1,27 @@
+class Solution:
+    def nextPermutation(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        if not nums or len(nums) == 1:
+            return 
+
+        start = None
+        localMin = None
+        for i in range(0, len(nums)):
+            if start is not None:
+                if nums[i] <= nums[localMin] and nums[i] > nums[start]:
+                    localMin = i
+
+            if nums[i] > nums[i-1]:
+                start = i - 1
+                localMin = i
+
+        if start is None:
+            nums[start:] = sorted(nums[start:])
+            return
+            
+        nums[start], nums[localMin] = nums[localMin], nums[start]
+        nums[start + 1:] = sorted(nums[start + 1:])
+
+        return
